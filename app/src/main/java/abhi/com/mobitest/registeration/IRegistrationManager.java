@@ -2,6 +2,8 @@ package abhi.com.mobitest.registeration;
 
 import android.content.Intent;
 
+import abhi.com.mobitest.entity.UserData;
+
 /**
  * Created by Abhishek on 03-Nov-16.
  */

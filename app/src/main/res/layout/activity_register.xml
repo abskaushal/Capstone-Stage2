@@ -34,10 +34,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimen_4"
+            android:editable="false"
             android:hint="@string/username"
+
             android:padding="@dimen/dimen_4"
-
-
             android:visibility="visible" />
     </android.support.design.widget.TextInputLayout>
 
@@ -50,6 +50,7 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:editable="false"
             android:layout_margin="@dimen/dimen_4"
             android:hint="@string/email"
             android:padding="@dimen/dimen_4"

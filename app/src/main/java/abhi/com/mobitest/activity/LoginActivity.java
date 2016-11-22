@@ -16,7 +16,7 @@ import abhi.com.mobitest.registeration.GoogleRegFactory;
 import abhi.com.mobitest.registeration.IRegistrationManager;
 import abhi.com.mobitest.registeration.IUserDataCallback;
 import abhi.com.mobitest.registeration.RegistrationAbsFactory;
-import abhi.com.mobitest.registeration.UserData;
+import abhi.com.mobitest.entity.UserData;
 
 public class LoginActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,IUserDataCallback,
@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity implements
         extra.putParcelable(DATA,data);
         registerIntent.putExtra(BUNDLE,extra);
         startActivity(registerIntent);
-        Toast.makeText(LoginActivity.this,""+data.mDisplayName,Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this,""+data.getUserName(),Toast.LENGTH_SHORT).show();
     }
 
     @Override

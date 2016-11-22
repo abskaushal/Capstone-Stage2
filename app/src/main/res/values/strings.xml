@@ -11,6 +11,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="create_account">Create Account</string>
     <string name="create_test">Create Test</string>
+    <string name="login">Login</string>
     <string name="invite_participant">Invite Participant</string>
     <string name="teacher">Teacher</string>
     <string name="student">Student</string>
@@ -33,6 +34,7 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="loading">Loading..</string>
 
     <string name="action_settings">Settings</string>
 

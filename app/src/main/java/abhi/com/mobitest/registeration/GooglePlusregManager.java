@@ -12,6 +12,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import abhi.com.mobitest.constant.UserConstant;
+import abhi.com.mobitest.entity.UserData;
+
 
 /**
  * Created by Abhishek on 03-Nov-16.
@@ -30,19 +33,19 @@ public class GooglePlusregManager implements IRegistrationManager,
         this.mContext = mContext;
         this.mUserDataCallback = mUserDataCallback;
         try {
-            mActivity = (AppCompatActivity)mContext;
+            mActivity = (AppCompatActivity) mContext;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void startRegistrationProcess() throws NullPointerException{
+    public void startRegistrationProcess() throws NullPointerException {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(mContext)
-                .enableAutoManage(mActivity , this)
+                .enableAutoManage(mActivity, this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -55,7 +58,7 @@ public class GooglePlusregManager implements IRegistrationManager,
     public void stopRegistrationProcess() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-            mGoogleApiClient.stopAutoManage((AppCompatActivity)mContext);
+            mGoogleApiClient.stopAutoManage((AppCompatActivity) mContext);
             mGoogleApiClient.disconnect();
             mGoogleApiClient = null;
             gso = null;
@@ -78,7 +81,6 @@ public class GooglePlusregManager implements IRegistrationManager,
     }
 
 
-
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         System.out.println("co");
@@ -87,18 +89,19 @@ public class GooglePlusregManager implements IRegistrationManager,
     private void handleSignInResult(GoogleSignInResult result) {
         //If the login succeed
         if (result.isSuccess()) {
-                GoogleSignInAccount acct = result.getSignInAccount();
-                UserData data = new UserData();
-                if (acct.getDisplayName() != null) {
-                    data.mDisplayName = acct.getDisplayName();
-                } if (acct.getEmail() != null) {
-                    data.mEmailId = acct.getEmail();
-                } if (acct.getPhotoUrl() != null && acct.getPhotoUrl().toString() != null) {
-                    data.mImageUrl = acct.getPhotoUrl().toString();
-                }
-                data.mPassword = "";
-                data.mzipcode = "";
-                processResponse(data);
+            GoogleSignInAccount acct = result.getSignInAccount();
+            UserData data = new UserData();
+            if (acct.getDisplayName() != null) {
+                data.setUserName(acct.getDisplayName());
+            }
+            if (acct.getEmail() != null) {
+                data.setEmail(acct.getEmail());
+            }
+            if (acct.getPhotoUrl() != null && acct.getPhotoUrl().toString() != null) {
+                data.setImageUrl(acct.getPhotoUrl().toString());
+            }
+            data.setParentAccount(UserConstant.GOOGLE);
+            processResponse(data);
         }
     }
 
