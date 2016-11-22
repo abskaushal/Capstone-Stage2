@@ -8,14 +8,11 @@ import android.content.Context;
  */
 public class AppManager extends Application {
 
-    private static Context mContext;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext = getApplicationContext();
+        UserPreference.init(getApplicationContext());
     }
 
-    public static Context getContext(){
-        return mContext;
-    }
 }

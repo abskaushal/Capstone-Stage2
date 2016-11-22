@@ -50,9 +50,13 @@ public class LoginAsync extends AsyncTask<UserData, Void, WebData> {
 
     @Override
     protected WebData doInBackground(UserData... params) {
-
-        return UserClient.getInstance().registerUser(params[0]);
-
+        WebData data = null;
+        if (mCode == LOGIN) {
+            data = UserClient.getInstance().loginUser(params[0]);
+        } else {
+            data =  UserClient.getInstance().registerUser(params[0]);
+        }
+        return data;
     }
 
     @Override

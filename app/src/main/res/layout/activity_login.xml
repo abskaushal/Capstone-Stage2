@@ -61,7 +61,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:id="@+id/createAccount"
+            android:id="@+id/login_btn"
             style="@style/PositiveButtonStyle"
             android:layout_width="match_parent"
             android:layout_marginTop="@dimen/dimen_20"

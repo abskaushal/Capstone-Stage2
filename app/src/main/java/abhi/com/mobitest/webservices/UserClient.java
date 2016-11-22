@@ -6,6 +6,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
+import org.json.JSONObject;
+
 import abhi.com.mobitest.constant.UserConstant;
 import abhi.com.mobitest.entity.UserData;
 import okhttp3.HttpUrl;
@@ -22,6 +24,7 @@ public class UserClient {
 
     private static final String TAG = UserClient.class.getSimpleName();
     public static final MediaType JSON = MediaType.parse(WebConstant.MEDIA_TYPE);
+    private static final String ERROR_MSG = "Error in getting data.Please try again.";
 
     private UserClient() {
 
@@ -35,6 +38,13 @@ public class UserClient {
         return UserClientHelper.INSTANCE;
     }
 
+
+    /**
+     * Register the new user.
+     *
+     * @param userData
+     * @return
+     */
     public WebData registerUser(UserData userData) {
 
         WebData data = new WebData();
@@ -48,14 +58,56 @@ public class UserClient {
                     .build();
             final OkHttpClient client = OkHttpClientFactory.getOkHttpClientInstance();
             Response response = client.newCall(request).execute();
-            String responseMessage = response.body().string();
-            Log.v(TAG,responseMessage);
+            if (response.isSuccessful()) {
+                data.setSuccess(true);
+                String responseMessage = response.body().string();
+                Log.v(TAG, responseMessage);
+            } else {
+                data.setSuccess(false);
+                data.setMessage(ERROR_MSG);
+            }
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return data;
+    }
 
+    /**
+     * Login user api
+     * @param userData
+     * @return
+     */
+    public WebData loginUser(UserData userData) {
+        WebData data = new WebData();
+        final OkHttpClient client = OkHttpClientFactory.getOkHttpClientInstance();
+        HttpUrl.Builder builder = HttpUrl.parse(WebConstant.LOGIN_URL).newBuilder();
+        builder.addQueryParameter(WebConstant.EMAIL, userData.getEmail());
+        builder.addQueryParameter(WebConstant.PASSWORD, userData.getPassword());
+        Request request = new Request.Builder().url(builder.build().toString()).build();
+        try {
+            Response response = client.newCall(request).execute();
+            if (response.isSuccessful()) {
 
+                data.setSuccess(true);
+                String jsonResponse = response.body().string();
+                JSONObject object = new JSONObject(jsonResponse);
+                JSONObject statusObject = object.getJSONObject("status");
+                if (statusObject.has("statusCode")) {
+                    data.setStatusCode(statusObject.getInt("statusCode"));
+                }
+                if (statusObject.has("statusMessage")) {
+                    data.setMessage(statusObject.getString("statusMessage"));
+                }
+
+            } else {
+                data.setSuccess(false);
+                data.setMessage(ERROR_MSG);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return data;
     }
 }
