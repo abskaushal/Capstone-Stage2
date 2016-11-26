@@ -7,13 +7,13 @@ import android.os.Parcelable;
  * Created by Abhishek on 03-Nov-16.
  */
 public class UserData implements Parcelable, IBaseData {
-    private String userName;
+    private String displayname;
     private String email;
-    private String imageUrl;
-    private String parentAccount;
+    private String imageurl;
+    private String parentaccount;
     private String password;
-    private String gcmId;
-    private int role;
+    private String gsmid;
+    private int category;
     private int userId;
 
     public UserData() {
@@ -29,11 +29,11 @@ public class UserData implements Parcelable, IBaseData {
     }
 
     public String getUserName() {
-        return userName;
+        return displayname;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.displayname = userName;
     }
 
     public String getEmail() {
@@ -45,35 +45,35 @@ public class UserData implements Parcelable, IBaseData {
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return imageurl;
     }
 
     public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+        this.imageurl = imageUrl;
     }
 
     public String getParentAccount() {
-        return parentAccount;
+        return parentaccount;
     }
 
     public void setParentAccount(String parentAccount) {
-        this.parentAccount = parentAccount;
+        this.parentaccount = parentAccount;
     }
 
     public String getGcmId() {
-        return gcmId;
+        return gsmid;
     }
 
     public void setGcmId(String gcmId) {
-        this.gcmId = gcmId;
+        this.gsmid = gcmId;
     }
 
     public int getRole() {
-        return role;
+        return category;
     }
 
     public void setRole(int role) {
-        this.role = role;
+        this.category = role;
     }
 
     public int getUserId() {
@@ -87,12 +87,12 @@ public class UserData implements Parcelable, IBaseData {
     public UserData(Parcel in) {
         String[] data = new String[7];
         in.readStringArray(data);
-        this.userName = data[0];
+        this.displayname = data[0];
         this.email = data[1];
-        this.imageUrl = data[2];
-        this.parentAccount = data[3];
-        this.gcmId = data[4];
-        this.role = Integer.parseInt(data[5]);
+        this.imageurl = data[2];
+        this.parentaccount = data[3];
+        this.gsmid = data[4];
+        this.category = Integer.parseInt(data[5]);
         this.userId = Integer.parseInt(data[6]);
 
     }
@@ -104,7 +104,7 @@ public class UserData implements Parcelable, IBaseData {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{this.userName, this.email, this.imageUrl, this.parentAccount, this.gcmId, this.role + "", this.userId + ""});
+        dest.writeStringArray(new String[]{this.displayname, this.email, this.imageurl, this.parentaccount, this.gsmid, this.category + "", this.userId + ""});
     }
 
     public static final Parcelable.Creator<UserData> CREATOR = new Parcelable.Creator<UserData>() {

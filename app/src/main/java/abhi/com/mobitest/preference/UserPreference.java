@@ -57,6 +57,14 @@ public class UserPreference {
         return data;
     }
 
+    public static String getUserId() {
+        return "" + mPreferences.getInt(USER_ID, 0);
+    }
+
+    public static String getUserDataByField(String field) {
+        return mPreferences.getString(field, "");
+    }
+
     public static boolean getLoginStatus() {
         return mPreferences.getBoolean(LOGIN_STATUS, false);
     }

@@ -59,11 +59,17 @@ public class LoginActivity extends AppCompatActivity implements
     private void doLogin() {
         String email = emailEt.getText().toString().trim();
         String password = passwordEt.getText().toString().trim();
-        UserData data = new UserData();
-        data.setEmail(email);
-        data.setPassword(password);
-        LoginAsync loginAsync = new LoginAsync(LoginActivity.this, LoginAsync.LOGIN);
-        loginAsync.execute(data);
+        if (email.length() == 0) {
+            Toast.makeText(getApplicationContext(), "Please enter email", Toast.LENGTH_SHORT).show();
+        } else if (password.length() == 0) {
+            Toast.makeText(getApplicationContext(), "Please enter password", Toast.LENGTH_SHORT).show();
+        } else {
+            UserData data = new UserData();
+            data.setEmail(email);
+            data.setPassword(password);
+            LoginAsync loginAsync = new LoginAsync(LoginActivity.this, LoginAsync.LOGIN);
+            loginAsync.execute(data);
+        }
     }
 
     @Override

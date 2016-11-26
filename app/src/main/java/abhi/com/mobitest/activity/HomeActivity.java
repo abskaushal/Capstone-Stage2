@@ -1,9 +1,13 @@
 package abhi.com.mobitest.activity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,8 +17,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import abhi.com.mobitest.R;
+import abhi.com.mobitest.preference.UserPreference;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,7 +37,7 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent createIntent = new Intent(HomeActivity.this,CreateTestActivity.class);
+                Intent createIntent = new Intent(HomeActivity.this, CreateTestActivity.class);
                 startActivity(createIntent);
             }
         });
@@ -43,6 +50,15 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+        ImageView userImageView = (ImageView) header.findViewById(R.id.user_image);
+        TextView userNameTv = (TextView) header.findViewById(R.id.username);
+        TextView emailTv = (TextView) header.findViewById(R.id.email);
+
+        userNameTv.setText(UserPreference.getUserDataByField(UserPreference.USERNAME));
+        emailTv.setText(UserPreference.getUserDataByField(UserPreference.EMAIL));
+
     }
 
     @Override
@@ -83,22 +99,48 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_account) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_logout) {
+            doLogout();
+        } else if (id == R.id.nav_about_us) {
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void doLogout() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this)
+                .setMessage(getResources().getString(R.string.test_created_successfully))
+                .setPositiveButton(getResources().getString(R.string.invite), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        UserPreference.clearData();
+                        startActivity(intent);
+                        dialog.dismiss();
+                        HomeActivity.this.finish();
+
+                    }
+                }).setNegativeButton(getResources().getString(R.string.later), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+
+        Dialog dialog = builder.create();
+        dialog.show();
+
+
     }
 }

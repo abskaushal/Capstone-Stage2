@@ -1,15 +1,18 @@
 package abhi.com.mobitest.webservices;
 
+import android.content.Intent;
 import android.util.Log;
 
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import abhi.com.mobitest.constant.UserConstant;
 import abhi.com.mobitest.entity.UserData;
+import abhi.com.mobitest.preference.UserPreference;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -60,6 +63,7 @@ public class UserClient {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 data.setSuccess(true);
+                UserPreference.saveUserInfo(new UserData());
                 String responseMessage = response.body().string();
                 Log.v(TAG, responseMessage);
             } else {
@@ -75,6 +79,7 @@ public class UserClient {
 
     /**
      * Login user api
+     *
      * @param userData
      * @return
      */
@@ -90,24 +95,52 @@ public class UserClient {
             if (response.isSuccessful()) {
 
                 data.setSuccess(true);
+                data.setMessage("Login Successful");
                 String jsonResponse = response.body().string();
                 JSONObject object = new JSONObject(jsonResponse);
                 JSONObject statusObject = object.getJSONObject("status");
                 if (statusObject.has("statusCode")) {
                     data.setStatusCode(statusObject.getInt("statusCode"));
                 }
-                if (statusObject.has("statusMessage")) {
-                    data.setMessage(statusObject.getString("statusMessage"));
-                }
 
+
+                if (data.getStatusCode() != 301) {
+
+                    JSONObject userObject = object.getJSONObject("user");
+                    parseUserData(userObject, userData);
+                    UserPreference.saveUserInfo(userData);
+                } else {
+                    data.setSuccess(false);
+                    if (statusObject.has("statusMessage")) {
+                        data.setMessage(statusObject.getString("statusMessage"));
+                    }
+                }
             } else {
                 data.setSuccess(false);
                 data.setMessage(ERROR_MSG);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            data.setSuccess(false);
+            data.setMessage(ERROR_MSG);
         }
 
         return data;
+    }
+
+    private void parseUserData(JSONObject jsonObject, UserData userData) {
+        {
+            try {
+                userData.setUserId(Integer.parseInt(jsonObject.getString("id")));
+                userData.setUserName(jsonObject.getString("displayname"));
+                userData.setImageUrl(jsonObject.getString("imageurl"));
+                userData.setRole(Integer.parseInt(jsonObject.getString("category")));
+                userData.setParentAccount(jsonObject.getString("parentaccount"));
+                userData.setGcmId(jsonObject.getString("gsmid"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
