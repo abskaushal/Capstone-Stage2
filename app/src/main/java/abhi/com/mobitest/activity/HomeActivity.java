@@ -24,6 +24,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -55,6 +58,13 @@ public class HomeActivity extends AppCompatActivity
         initToolbar();
         initUI();
         fetchTests();
+
+       MobileAds.initialize(getApplicationContext(), "ca-app-pub-3305246529016543~8383730915");
+
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
 
     }
 

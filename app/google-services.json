@@ -1,33 +1,27 @@
 {
   "project_info": {
-    "project_number": "837079811455",
-    "project_id": "firebase-mobitest"
+    "project_number": "92667833255",
+    "firebase_url": "https://mobitest-7bf26.firebaseio.com",
+    "project_id": "mobitest-7bf26",
+    "storage_bucket": "mobitest-7bf26.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:837079811455:android:6633f2cb70944d17",
+        "mobilesdk_app_id": "1:92667833255:android:6633f2cb70944d17",
         "android_client_info": {
           "package_name": "abhi.com.mobitest"
         }
       },
       "oauth_client": [
         {
-          "client_id": "837079811455-ctd4mbq0jbj814c5f6fr1g1id5gdo5t1.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "abhi.com.mobitest",
-            "certificate_hash": "054220F0EDAF5FB2AADDBBD6BFFAD9799F4CD3D5"
-          }
-        },
-        {
-          "client_id": "837079811455-vu7hb0f799rc6ki9togdd39vkgjpblka.apps.googleusercontent.com",
+          "client_id": "92667833255-hn3snt7it8utlvk1dein6cmm63jl1qqr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDHons38dwYsBXTRKUHjUeDpTzvtnyxp4U"
+          "current_key": "AIzaSyCmIAFvcVHUU2ngFDdUGGvTKn9Esirwsrg"
         }
       ],
       "services": {
@@ -39,7 +33,7 @@
           "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }
