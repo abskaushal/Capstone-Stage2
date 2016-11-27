@@ -63,7 +63,7 @@ public class UserClient {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 data.setSuccess(true);
-                UserPreference.saveUserInfo(new UserData());
+                UserPreference.saveUserInfo(userData);
                 String responseMessage = response.body().string();
                 Log.v(TAG, responseMessage);
             } else {

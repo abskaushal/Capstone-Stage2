@@ -1,5 +1,7 @@
 package abhi.com.mobitest.webservices;
 
+import java.util.List;
+
 import abhi.com.mobitest.entity.IBaseData;
 
 /**
@@ -12,6 +14,24 @@ public class WebData {
     private int statusCode;
     private String message;
     private IBaseData data;
+    private List<IBaseData> testData;
+    private int apiCode;
+
+    public List<IBaseData> getTestData() {
+        return testData;
+    }
+
+    public void setTestData(List<IBaseData> testData) {
+        this.testData = testData;
+    }
+
+    public int getApiCode() {
+        return apiCode;
+    }
+
+    public void setApiCode(int apiCode) {
+        this.apiCode = apiCode;
+    }
 
     public IBaseData getData() {
         return data;

@@ -20,7 +20,7 @@ import abhi.com.mobitest.webservices.WebData;
 public class TestAsync extends AsyncTask<TestData, Void, WebData> {
 
     public static final int CREATE_TEST = 1;
-    public static final int GET_TEST = 2;
+    public static final int GET_TEST_BY_USER_ID = 2;
     public static final int INVITE_STUDENT = 3;
     private Context mContext;
     private int mCode;
@@ -53,6 +53,8 @@ public class TestAsync extends AsyncTask<TestData, Void, WebData> {
         WebData data = null;
         if (mCode == CREATE_TEST) {
             data = TestClient.getInstance().createTest(params[0]);
+        }else if(mCode == GET_TEST_BY_USER_ID){
+            data = TestClient.getInstance().getTestByUserId(params[0]);
         }
         return data;
     }
@@ -63,7 +65,7 @@ public class TestAsync extends AsyncTask<TestData, Void, WebData> {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
-        data.setStatusCode(mCode);
+        data.setApiCode(mCode);
         mCallback.onDataReceived(data);
     }
 }

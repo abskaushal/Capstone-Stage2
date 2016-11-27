@@ -1,6 +1,7 @@
 package abhi.com.mobitest.preference;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -36,7 +37,7 @@ public class UserPreference {
         editor.putString(USERNAME, userData.getUserName());
         editor.putString(EMAIL, userData.getEmail());
         editor.putString(IMAGEURL, userData.getImageUrl());
-        editor.putInt(ROLE, userData.getRole());
+        editor.putString(ROLE, "" + userData.getRole());
         editor.putString(GCM_ID, userData.getGcmId());
         editor.putString(PARENT_ACCOUNT, userData.getParentAccount());
         editor.putBoolean(LOGIN_STATUS, true);
@@ -50,7 +51,7 @@ public class UserPreference {
         data.setUserName(mPreferences.getString(USERNAME, ""));
         data.setEmail(mPreferences.getString(EMAIL, ""));
         data.setImageUrl(mPreferences.getString(IMAGEURL, ""));
-        data.setRole(mPreferences.getInt(ROLE, 0));
+        data.setRole(Integer.parseInt(mPreferences.getString(ROLE, "0")));
         data.setGcmId(mPreferences.getString(GCM_ID, ""));
         data.setParentAccount(mPreferences.getString(PARENT_ACCOUNT, ""));
         data.setUserId(mPreferences.getInt(USER_ID, 0));
@@ -64,6 +65,7 @@ public class UserPreference {
     public static String getUserDataByField(String field) {
         return mPreferences.getString(field, "");
     }
+
 
     public static boolean getLoginStatus() {
         return mPreferences.getBoolean(LOGIN_STATUS, false);

@@ -141,6 +141,7 @@ public class RegisterActivity extends AppCompatActivity implements IWebService {
         if (webData.isSuccess()) {
             Intent homeIntent = new Intent(RegisterActivity.this, HomeActivity.class);
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(homeIntent);
         }
     }

@@ -65,6 +65,7 @@ public class LoginAsync extends AsyncTask<UserData, Void, WebData> {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+        data.setApiCode(mCode);
         mCallback.onDataReceived(data);
     }
 }

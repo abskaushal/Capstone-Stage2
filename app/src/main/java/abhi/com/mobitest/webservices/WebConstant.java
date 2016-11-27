@@ -12,9 +12,11 @@ public class WebConstant {
     public static final String REGISTER_URL = BASE_URL + "register";
     public static final String LOGIN_URL = BASE_URL + "login";
     public static final String CREATE_TEST_URL = BASE_URL + "createtest";
+    public static final String GET_TEST_BY_USER_ID = BASE_URL + "retrievetestbyuserid";
 
     //--------------------//
     public static final String EMAIL = "emailid";
     public static final String PASSWORD = "password";
+    public static final String USERID = "user_id";
 
 }

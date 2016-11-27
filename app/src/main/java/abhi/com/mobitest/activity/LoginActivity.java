@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements
         extra.putParcelable(DATA, data);
         registerIntent.putExtra(BUNDLE, extra);
         startActivity(registerIntent);
-        Toast.makeText(LoginActivity.this, "" + data.getUserName(), Toast.LENGTH_SHORT).show();
+        mRegistrationManager.stopRegistrationProcess();
     }
 
     @Override
