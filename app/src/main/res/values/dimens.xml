@@ -6,7 +6,9 @@
     <dimen name="dimen_5">5dp</dimen>
     <dimen name="dimen_10">10dp</dimen>
     <dimen name="dimen_20">20dp</dimen>
+    <dimen name="dimen_30">30dp</dimen>
     <dimen name="dimen_40">40dp</dimen>
+    <dimen name="dimen_46">46dp</dimen>
     <dimen name="dimen_50">50dp</dimen>
     <dimen name="dimen_100">100dp</dimen>
     <dimen name="dimen_200">200dp</dimen>
@@ -22,4 +24,7 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="widget_width">170dp</dimen>
+    <dimen name="widget_height">110dp</dimen>
 </resources>

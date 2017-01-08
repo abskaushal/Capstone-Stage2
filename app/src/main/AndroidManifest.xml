@@ -32,6 +32,26 @@
         <activity android:name=".activity.CreateTestActivity" />
         <activity android:name=".activity.InviteParticipantActivity" />
         <activity android:name=".activity.TestActivity"></activity>
+
+        <provider
+            android:authorities="abhi.com.mobitest.data.provider"
+            android:name="abhi.com.mobitest.provider.TestDataProvider"
+            android:exported="false"/>
+
+        <receiver android:name=".widget.TestWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="barqsoft.footballscores.ACTION_SCORE_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/test_app_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".widget.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

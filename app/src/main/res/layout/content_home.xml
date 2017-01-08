@@ -30,7 +30,6 @@
 
             android:gravity="center"
             android:padding="@dimen/dimen_20"
-            android:text="No test created. Click on + button below to create."
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_large" />
 

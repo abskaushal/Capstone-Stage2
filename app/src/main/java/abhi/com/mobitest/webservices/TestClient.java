@@ -13,8 +13,6 @@ import java.util.List;
 
 import abhi.com.mobitest.entity.IBaseData;
 import abhi.com.mobitest.entity.TestData;
-import abhi.com.mobitest.entity.UserData;
-import abhi.com.mobitest.preference.UserPreference;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -157,4 +155,6 @@ public class TestClient {
 
         data.setTestData(testList);
     }
+
+
 }

@@ -1,6 +1,7 @@
 package abhi.com.mobitest.activity;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,9 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -35,11 +33,10 @@ import abhi.com.mobitest.R;
 import abhi.com.mobitest.adapter.TestAdapter;
 import abhi.com.mobitest.entity.IBaseData;
 import abhi.com.mobitest.entity.TestData;
-import abhi.com.mobitest.entity.UserData;
 import abhi.com.mobitest.preference.UserPreference;
+import abhi.com.mobitest.provider.TestDataProvider;
 import abhi.com.mobitest.utils.RoundedImageView;
 import abhi.com.mobitest.webservices.IWebService;
-import abhi.com.mobitest.webservices.WebConstant;
 import abhi.com.mobitest.webservices.WebData;
 import abhi.com.mobitest.webservices.async.TestAsync;
 
@@ -222,10 +219,25 @@ public class HomeActivity extends AppCompatActivity
         if (webData.isSuccess()) {
             if (webData.getApiCode() == TestAsync.GET_TEST_BY_USER_ID) {
                 setTestList(webData.getTestData());
+                saveTestDataLocally((TestData) webData.getTestData());
             }
         }else{
             mNoTestView.setVisibility(View.VISIBLE);
             mTestRecyclerView.setVisibility(View.GONE);
         }
+    }
+
+    private void saveTestDataLocally(TestData data){
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TestDataProvider.DESCRIPTION,data.getDescription());
+        contentValues.put(TestDataProvider.DURATION,data.getDuration());
+        contentValues.put(TestDataProvider.USER_ID,data.getUserId());
+        contentValues.put(TestDataProvider.TEST_ID,data.getTestId());
+        contentValues.put(TestDataProvider.QUESTION,data.getQuestion());
+        contentValues.put(TestDataProvider.TITLE,data.getTitle());
+
+        getContentResolver().insert(TestDataProvider.CONTENT_URI,contentValues);
+
     }
 }

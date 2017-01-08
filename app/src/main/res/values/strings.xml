@@ -19,6 +19,7 @@
     <string name="student">Student</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title">Title</string>
+    <string name="upcoming_tests">Upcoming Test</string>
     <string name="time_left">Time left:   </string>
     <string name="description">Description/Rules</string>
     <string name="finish">Finish</string>
@@ -50,5 +51,10 @@
     <string name="title_activity_splash">SplashActivity</string>
 
     <string name="add_unit_id">ca-app-pub-3305246529016543/9860464119</string>
+    <string name="my_account">My Account</string>
+    <string name="share">Share</string>
+    <string name="logout">Logout</string>
+    <string name="about_us">About Us</string>
+    <string name="no_test_available">No test available</string>
 
 </resources>
