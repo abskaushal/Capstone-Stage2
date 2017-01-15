@@ -99,26 +99,26 @@ public class RegisterActivity extends AppCompatActivity implements IWebService {
             return msg;
         }
         if (TextUtils.isEmpty(emailEt.getText().toString())) {
-            msg = "Please enter Email";
+            msg = getString(R.string.enter_email);
             return msg;
         }
         if (TextUtils.isEmpty(passwordEt.getText().toString())) {
-            msg = "Please enter Password";
+            msg = getString(R.string.enter_email);
             return msg;
         }
         if (TextUtils.isEmpty(confirmPasswordEt.getText().toString())) {
-            msg = "Please enter Confirm Password";
+            msg = getString(R.string.enter_confirm_password);
             return msg;
         }
         if (!passwordEt.getText().toString().trim().equals(confirmPasswordEt.getText().toString().trim())) {
-            msg = "Password does not match";
+            msg = getString(R.string.password_does_not_match);
             return msg;
         } else {
             mUserData.setPassword(passwordEt.getText().toString().trim());
         }
 
         if (role == -1) {
-            msg = "Please select your role";
+            msg = getString(R.string.select_role);
             return msg;
         } else {
             mUserData.setRole(role);
@@ -142,7 +142,9 @@ public class RegisterActivity extends AppCompatActivity implements IWebService {
             Intent homeIntent = new Intent(RegisterActivity.this, HomeActivity.class);
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
             startActivity(homeIntent);
+            RegisterActivity.this.finish();
         }
     }
 }

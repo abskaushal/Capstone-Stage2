@@ -90,7 +90,7 @@ public class TestClient {
         WebData data = new WebData();
         final OkHttpClient client = OkHttpClientFactory.getOkHttpClientInstance();
         HttpUrl.Builder builder = HttpUrl.parse(WebConstant.GET_TEST_BY_USER_ID).newBuilder();
-        builder.addQueryParameter(WebConstant.USERID, "8000" /*+ userData.getUserId()*/);
+        builder.addQueryParameter(WebConstant.USERID,  testData.getUserId());
         Request request = new Request.Builder().url(builder.build().toString()).build();
         try {
             Response response = client.newCall(request).execute();

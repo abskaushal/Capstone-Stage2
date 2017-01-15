@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -20,10 +21,11 @@ import java.util.HashMap;
  */
 public class TestDataProvider extends ContentProvider {
 
-    public static final String PROVIDER_NAME = "abhi.com.mobitest.provider.TestDataProvider";
     public final static String AUTHORITY = "abhi.com.mobitest.data.provider";
-    public static final String TEST_URL = "content://" + PROVIDER_NAME + "/tests";
+    public static final String TEST_URL = "content://" + AUTHORITY + "/tests";
     public static final Uri CONTENT_URI = Uri.parse(TEST_URL);
+
+    public static final String ACTION_TEST_UPDATE = "abhi.com.mobitest.provider.ACTION_TEST_UPDATE";
 
     public static String _ID = "id";
     public static String TITLE = "title";
@@ -42,8 +44,8 @@ public class TestDataProvider extends ContentProvider {
     static final UriMatcher uriMatcher;
     static{
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(PROVIDER_NAME, "tests", TESTS);
-        uriMatcher.addURI(PROVIDER_NAME, "tests/#", TESTS_ID);
+        uriMatcher.addURI(AUTHORITY, "tests", TESTS);
+        uriMatcher.addURI(AUTHORITY, "tests/#", TESTS_ID);
     }
 
 
@@ -116,21 +118,21 @@ public class TestDataProvider extends ContentProvider {
                 break;
 
             case TESTS_ID:
-                qb.appendWhere( _ID + "=" + uri.getPathSegments().get(1));
+                qb.appendWhere( TEST_ID + "=" + uri.getPathSegments().get(1));
                 break;
 
             default:
         }
 
-        if (sortOrder == null || sortOrder == ""){
-            /**
+        /*if (sortOrder == null || sortOrder == ""){
+            *//**
              * By default sort on id
-             */
+             *//*
             sortOrder = _ID;
-        }
+        }*/
 
         Cursor c = qb.query(db,	projection,	selection,
-                selectionArgs,null, null, sortOrder);
+                selectionArgs,null, null, null);
         /**
          * register to watch a content URI for changes
          */
@@ -159,17 +161,13 @@ public class TestDataProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        /**
-         * Add a new student record
-         */
+
         long rowID = db.insert(	TESTS_TABLE_NAME, "", values);
 
-        /**
-         * If record is added successfully
-         */
         if (rowID > 0) {
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
             getContext().getContentResolver().notifyChange(_uri, null);
+            updateWidget();
             return _uri;
         }
 
@@ -219,4 +217,10 @@ public class TestDataProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(uri, null);
         return count;
     }
+
+    private void updateWidget(){
+        Intent intent = new Intent(ACTION_TEST_UPDATE).setPackage(getContext().getPackageName());
+        getContext().sendBroadcast(intent);
+    }
+
 }

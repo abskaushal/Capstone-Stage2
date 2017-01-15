@@ -224,14 +224,14 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 e.printStackTrace();
             }
         } else {
-            Toast.makeText(getApplicationContext(), "No more questions", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.no_more_que), Toast.LENGTH_SHORT).show();
             showFinishDialog();
         }
     }
 
     private void nextPressed() {
         if (optionRg.getCheckedRadioButtonId() == -1) {
-            Toast.makeText(getApplicationContext(), "Please select correct answer", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.select_correct_ans), Toast.LENGTH_SHORT).show();
         } else {
             int radioId = optionRg.getCheckedRadioButtonId();
             int selectedOption = 0;
@@ -279,7 +279,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showResult() {
         AlertDialog.Builder builder = new AlertDialog.Builder(TestActivity.this)
-                .setMessage("your total score is " + mScore + " out of " + mQuestionArray.length())
+                .setMessage(getString(R.string.your_score) + mScore + getString(R.string.out_of) + mQuestionArray.length())
                 .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

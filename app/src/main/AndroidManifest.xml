@@ -36,12 +36,13 @@
         <provider
             android:authorities="abhi.com.mobitest.data.provider"
             android:name="abhi.com.mobitest.provider.TestDataProvider"
-            android:exported="false"/>
+            android:exported="true"/>
 
-        <receiver android:name=".widget.TestWidgetProvider">
+        <receiver android:name="abhi.com.mobitest.widget.WidgetProvider"
+            android:icon="@drawable/ic_menu_send">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="barqsoft.footballscores.ACTION_SCORE_UPDATE" />
+                <action android:name="abhi.com.mobitest.provider.ACTION_TEST_UPDATE"/>
             </intent-filter>
 
             <meta-data
@@ -50,7 +51,7 @@
         </receiver>
 
         <service
-            android:name=".widget.WidgetService"
+            android:name="abhi.com.mobitest.widget.WidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 

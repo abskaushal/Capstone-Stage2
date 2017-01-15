@@ -222,7 +222,7 @@ public class CreateTestActivity extends AppCompatActivity implements IWebService
     @Override
     public void onDataReceived(WebData webData) {
         if (webData.isSuccess()) {
-            if (webData.getStatusCode() == TestAsync.CREATE_TEST) {
+            if (webData.getApiCode() == TestAsync.CREATE_TEST) {
                 showInviteDialog((TestData) webData.getData());
             }
         } else {

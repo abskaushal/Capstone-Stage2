@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
+            android:text="@string/no_test_available"
             android:gravity="center"
             android:padding="@dimen/dimen_20"
             android:textColor="@color/black"
@@ -35,10 +35,10 @@
 
     </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.RecyclerView
+    <ListView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"></ListView>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"

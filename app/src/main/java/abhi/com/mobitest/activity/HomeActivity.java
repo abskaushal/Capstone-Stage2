@@ -4,9 +4,13 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -31,6 +36,7 @@ import java.util.List;
 
 import abhi.com.mobitest.R;
 import abhi.com.mobitest.adapter.TestAdapter;
+import abhi.com.mobitest.adapter.TestCursorAdapter;
 import abhi.com.mobitest.entity.IBaseData;
 import abhi.com.mobitest.entity.TestData;
 import abhi.com.mobitest.preference.UserPreference;
@@ -38,25 +44,36 @@ import abhi.com.mobitest.provider.TestDataProvider;
 import abhi.com.mobitest.utils.RoundedImageView;
 import abhi.com.mobitest.webservices.IWebService;
 import abhi.com.mobitest.webservices.WebData;
+import abhi.com.mobitest.webservices.async.LoginAsync;
 import abhi.com.mobitest.webservices.async.TestAsync;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, IWebService {
+        implements NavigationView.OnNavigationItemSelectedListener, IWebService, LoaderManager.LoaderCallbacks<Cursor> {
 
 
     private CardView mNoTestView;
-    private RecyclerView mTestRecyclerView;
+    private ListView mTestRecyclerView;
+    private TestCursorAdapter cursorAdapter;
+    private static final int TEST_LOADER = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        if (!UserPreference.getLoginStatus()) {
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            startActivity(intent);
+            HomeActivity.this.finish();
+            return;
+        }
         initToolbar();
         initUI();
+
+        getSupportLoaderManager().initLoader(TEST_LOADER, null, HomeActivity.this);
         fetchTests();
 
-       MobileAds.initialize(getApplicationContext(), "ca-app-pub-3305246529016543~8383730915");
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3305246529016543~8383730915");
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -67,7 +84,10 @@ public class HomeActivity extends AppCompatActivity
 
     private void initUI() {
         mNoTestView = (CardView) findViewById(R.id.cardview);
-        mTestRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mTestRecyclerView = (ListView) findViewById(R.id.recycler_view);
+        cursorAdapter = new TestCursorAdapter(HomeActivity.this, null, 0);
+        mTestRecyclerView.setAdapter(cursorAdapter);
+
     }
 
     private void initToolbar() {
@@ -99,10 +119,14 @@ public class HomeActivity extends AppCompatActivity
 
         userNameTv.setText(UserPreference.getUserDataByField(UserPreference.USERNAME));
         emailTv.setText(UserPreference.getUserDataByField(UserPreference.EMAIL));
-        Picasso.with(getApplicationContext())
-                .load(UserPreference.getUserDataByField(UserPreference.IMAGEURL))
-                .error(R.mipmap.ic_launcher)
-                .into(userImageView);
+        if (UserPreference.getUserDataByField(UserPreference.IMAGEURL).length() > 0) {
+            Picasso.with(getApplicationContext())
+                    .load(UserPreference.getUserDataByField(UserPreference.IMAGEURL))
+                    .error(R.mipmap.ic_launcher)
+                    .into(userImageView);
+        } else {
+            userImageView.setImageResource(R.mipmap.ic_launcher);
+        }
     }
 
     private void fetchTests() {
@@ -112,7 +136,7 @@ public class HomeActivity extends AppCompatActivity
         fetchTest.execute(data);
     }
 
-    private void setTestList(List<IBaseData> list) {
+/*    private void setTestList(List<IBaseData> list) {
         if (list.size() > 0) {
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 1);
             mTestRecyclerView.setHasFixedSize(true);
@@ -127,7 +151,7 @@ public class HomeActivity extends AppCompatActivity
             mNoTestView.setVisibility(View.VISIBLE);
             mTestRecyclerView.setVisibility(View.GONE);
         }
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -169,13 +193,13 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_account) {
-            // Handle the camera action
-        } else if (id == R.id.nav_share) {
 
+        } else if (id == R.id.nav_share) {
+            share();
         } else if (id == R.id.nav_logout) {
             doLogout();
         } else if (id == R.id.nav_about_us) {
-
+            showAboutUs();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -194,6 +218,7 @@ public class HomeActivity extends AppCompatActivity
                         Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         UserPreference.clearData();
+                        getContentResolver().delete(TestDataProvider.CONTENT_URI, null, null);
                         startActivity(intent);
                         dialog.dismiss();
                         HomeActivity.this.finish();
@@ -209,8 +234,6 @@ public class HomeActivity extends AppCompatActivity
 
         Dialog dialog = builder.create();
         dialog.show();
-
-
     }
 
     @Override
@@ -218,26 +241,82 @@ public class HomeActivity extends AppCompatActivity
 
         if (webData.isSuccess()) {
             if (webData.getApiCode() == TestAsync.GET_TEST_BY_USER_ID) {
-                setTestList(webData.getTestData());
-                saveTestDataLocally((TestData) webData.getTestData());
+                saveTestDataLocally(webData.getTestData());
             }
-        }else{
+        } else {
             mNoTestView.setVisibility(View.VISIBLE);
             mTestRecyclerView.setVisibility(View.GONE);
         }
     }
 
-    private void saveTestDataLocally(TestData data){
+    private void saveTestDataLocally(List<IBaseData> dataList) {
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(TestDataProvider.DESCRIPTION,data.getDescription());
-        contentValues.put(TestDataProvider.DURATION,data.getDuration());
-        contentValues.put(TestDataProvider.USER_ID,data.getUserId());
-        contentValues.put(TestDataProvider.TEST_ID,data.getTestId());
-        contentValues.put(TestDataProvider.QUESTION,data.getQuestion());
-        contentValues.put(TestDataProvider.TITLE,data.getTitle());
+        for (IBaseData iData : dataList) {
+            TestData data = (TestData) iData;
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(TestDataProvider.DESCRIPTION, data.getDescription());
+            contentValues.put(TestDataProvider.DURATION, data.getDuration());
+            contentValues.put(TestDataProvider.USER_ID, data.getUserId());
+            contentValues.put(TestDataProvider.TEST_ID, data.getTestId());
+            contentValues.put(TestDataProvider.QUESTION, data.getQuestion());
+            contentValues.put(TestDataProvider.TITLE, data.getTitle());
 
-        getContentResolver().insert(TestDataProvider.CONTENT_URI,contentValues);
+            getContentResolver().insert(TestDataProvider.CONTENT_URI, contentValues);
+        }
 
     }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(HomeActivity.this, TestDataProvider.CONTENT_URI,
+                null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        int i = 0;
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            i++;
+            cursor.moveToNext();
+        }
+        //Log.v(FetchScoreTask.LOG_TAG,"Loader query: " + String.valueOf(i));
+        cursorAdapter.swapCursor(cursor);
+    }
+
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        cursorAdapter.swapCursor(null);
+    }
+
+
+    private void showAboutUs() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this)
+                .setMessage(getResources().getString(R.string.about_us_msg))
+                .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                });
+
+
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    private void share() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+    }
+
+
 }

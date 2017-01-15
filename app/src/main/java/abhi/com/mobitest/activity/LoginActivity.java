@@ -60,9 +60,9 @@ public class LoginActivity extends AppCompatActivity implements
         String email = emailEt.getText().toString().trim();
         String password = passwordEt.getText().toString().trim();
         if (email.length() == 0) {
-            Toast.makeText(getApplicationContext(), "Please enter email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.enter_email), Toast.LENGTH_SHORT).show();
         } else if (password.length() == 0) {
-            Toast.makeText(getApplicationContext(), "Please enter password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.enter_password), Toast.LENGTH_SHORT).show();
         } else {
             UserData data = new UserData();
             data.setEmail(email);

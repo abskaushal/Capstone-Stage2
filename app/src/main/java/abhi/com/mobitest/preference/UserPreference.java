@@ -67,6 +67,8 @@ public class UserPreference {
     }
 
 
+
+
     public static boolean getLoginStatus() {
         return mPreferences.getBoolean(LOGIN_STATUS, false);
     }

@@ -57,4 +57,17 @@
     <string name="about_us">About Us</string>
     <string name="no_test_available">No test available</string>
 
+
+    <string name="select_role">Please select your role</string>
+    <string name="password_does_not_match">Password does not match</string>
+    <string name="enter_confirm_password">Please enter confirm password</string>
+    <string name="enter_password">Please enter password</string>
+    <string name="enter_email">Please enter email</string>
+    <string name="no_more_que">No more question</string>
+    <string name="select_correct_ans">Please select correct answer</string>
+    <string name="your_score">Your score is </string>
+    <string name="out_of"> out of </string>
+    <string name="about_us_msg">MobiTest app is developed as a part of UDACITY Android Nanodegree program.</string>
+    <string name="share_text">Share MobiTest with your friends: https://github.com/abskaushal/Capstone-Stage2 </string>
+
 </resources>
